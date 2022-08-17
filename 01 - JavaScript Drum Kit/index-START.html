@@ -58,6 +58,31 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  //when key is pressed down this function will run and play the audio as well as do the transition
+  function playSound(e){
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+
+    if(!audio) return; //stop function from running
+    audio.currentTime = 0; //rewind the audio so we can play it continuously 
+    audio.play(); //play the audio
+    key.classList.add('playing');
+  }
+
+  //triggered when transformation on key is over and gets rid of border by removing "playing" class
+  function removeTransition(e){
+    if(e.propertyName !== 'transform') return; //if the transformation is not transform then don't remove
+    this.classList.remove('playing');
+  }
+
+  //selects all keys
+  const keys = document.querySelectorAll('.key');
+  //even listener on each key listening for transition end 
+  keys.forEach( key => key.addEventListener('transitionend', removeTransition));
+
+  //event listener on each key listening for when key is pressed down
+  window.addEventListener('keydown', playSound);
+
 
 </script>
 
